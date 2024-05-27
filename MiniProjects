@@ -1,0 +1,296 @@
+"""
+#Spell Checker Tool
+from difflib import SequenceMatcher
+import os
+
+icon=u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'u'\u25b2'
+print (icon)
+print ("Hello. What would you like me to do for you today?")
+spellchecklist=[]
+sentencewords=[]
+sentencewords2=[]
+words=0
+correct=0
+incorrectwords=0
+dictwords=0
+spellcheckedwords=0
+actionmenu=True
+sentencemenu=True
+englishwords=[]
+finalsentence=[]
+filemenu=True
+score=[]
+score2=[]
+
+while actionmenu==True: #need this in order to validate if the user does not write a valid option rather than causing an error
+    action = int(input("Enter the number 1 to spell check a sentence, 2 to spell check a file, or 0 to quit the program.  "))
+    if action == 1:
+         #empty list created for the words in the spellchecker to be added as a list to this
+        sentence=input("Enter a sentence: ")
+        sentence=sentence.lower() #input is case insenstitive
+        sentencewords=sentence.split() #splits the words of the user's sentence into a list so that each word can be checked individually
+        spellCheckerFile=open("EnglishWords.txt","r")
+        for line in spellCheckerFile:
+            englishwords.append(line.rstrip()) #adds the words in the spellchecker to the list englishwords; to make it easier to compare sentence words to spellchecker words
+        spellCheckerFile.close()
+
+        for i in range (len(sentencewords)): #loop created to iterate checking of spelling for all the words in the sentence
+            if sentencewords[i] in englishwords:
+                finalsentence.append(sentencewords[i]) #adds all of the final checked words into finalsentence
+                print (sentencewords[i])
+                words += 1
+                correct += 1
+            else:
+                print("This word: " + sentencewords[i] + " is not found in the dictionary. ")
+                sentencecheck=int(input("Please enter 1 to ignore the word, 2 to mark, 3 to add to dictionary or 4 for a suggestion of the correct spelling. "))
+                if sentencecheck == 1:
+                    finalsentence.append(sentencewords[i])
+                    words += 1
+                    correct += 1
+                    print (finalsentence)
+                    print("Total words: ",words," Correct words: ",correct," Incorrect words:",incorrectwords," Words added to dictionary: ",dictwords," Spell checked words: ",spellcheckedwords)
+                elif sentencecheck == 2:
+                    finalsentence.append("?" + sentencewords[i] + "?")
+                    words += 1
+                    incorrectwords += 1
+                    print (finalsentence)
+                    print("Total words: ",words," Correct words: ",correct," Incorrect words:",incorrectwords," Words added to dictionary: ",dictwords," Spell checked words: ",spellcheckedwords)
+                elif sentencecheck == 3:
+                    finalsentence.append(sentencewords[i])
+                    spellCheckerFile=open("EnglishWords.txt","a")
+                    spellCheckerFile.write(sentencewords[i]) #writes the word i into the spellchecker file
+                    words += 1
+                    dictwords += 1
+                    print(finalsentence)
+                    print("Total words: ",words," Correct words: ",correct," Incorrect words:",incorrectwords," Words added to dictionary: ",dictwords," Spell checked words: ",spellcheckedwords)
+                elif sentencecheck == 4:
+                    spellCheckerFile=open("EnglishWords.txt","r")
+                    for line in spellCheckerFile:
+                        englishwords.append(line.rstrip()) #adds the words in the spellchecker to the list englishwords; to make it easier to compare sentence words to spellchecker words
+                
+                    for index in range(len(englishwords)):
+                        
+                        word1=sentencewords[i]
+                        word2=englishwords[index]
+                        score.append(SequenceMatcher(None,word1,word2).ratio())
+                    largest=max(score)
+                    print(largest)
+                    indexoflargest=score.index(largest)
+                    print(englishwords[indexoflargest]," is suggestion would you like to add")
+                    add=input("add , choose y/n")
+                    if add=="y":
+                        finalsentence.append(englishwords[indexoflargest])
+                        spellcheckedwords += 1
+                        words +=1
+                    elif add=="n":
+                        finalsentence.append("?"+sentencewords[i]+"?")
+                        words +=1
+                        incorrectwords += 1
+                print("your final sentence is ",finalsentence)
+                print("total words:",words,"correct words:",correct,"incorrectwords:",incorrectwords,"words added to dictionary:",dictwords," spell checked:",spellcheckedwords)
+                f = open("finalamendment.txt", "w")
+                for i in range(len(finalsentence))
+                f.write(str(finalsentence))
+                f.write("total words:",words,"correct words:",correct,"incorrectwords:",incorrectwords,"words added to dictionary:",dictwords," spell checked:",spellcheckedwords)
+                f.close()
+        actionmenu==False
+    elif action==2:
+        myFile=open("EnglishWords.txt","r")
+        for line in myFile:
+            englishwords.append(line.rstrip())
+        myFile.close()
+        while filemenu==True:
+            filename=input("please enter file name")
+            if filename=="t.txt":
+                print("correct file , we would proceed")
+                filemenu=False
+            else:
+                print("incorrect file name")
+        myFile=open("t.txt","r")
+        for line in myFile:
+            for word in line.split(): 
+                sentencewords2.append(word.rstrip())
+        myFile.close()
+      
+        for i in range(len(sentencewords2)):
+            if sentencewords2[i] in englishwords:
+                print(sentencewords2[i])
+                finalsentence.append(sentencewords2[i])
+                words += 1
+                correct += 1
+            else:
+                print(sentencewords2[i],":word not found")
+                option=int(input("enter 1 to ignore, 2 to mark as incorrect, 3 to add this to dictionary, and 4 for spelling suggestions "))
+                if option==1:
+                    finalsentence.append(sentencewords2[i])
+                    words += 1
+                    correct += 1
+                elif option==2:
+                    finalsentence.append("?"+sentencewords2[i]+"?")
+                    words += 1
+                    incorrectwords += 1
+                elif option==3:
+                    finalsentence.append(sentencewords2[i])
+                    myFile=open("EnglishWords.txt","a")
+                    myFile.write(sentencewords2[i])
+                    words += 1
+                    dictwords += 1
+                elif option==4:
+                    spellCheckerFile=open("EnglishWords.txt","r")
+                    for line in spellCheckerFile:
+                        englishwords.append(line.rstrip()) #adds the words in the spellchecker to the list englishwords; to make it easier to compare sentence words to spellchecker words
+                
+                    for index in range(len(englishwords)):
+                        word1=sentencewords2[i]
+                        word2=englishwords[index]
+                        score2.append(SequenceMatcher(None,word1,word2).ratio())
+                    largest=max(score2)
+                    print(largest)
+                    indexoflargest=score2.index(largest)
+                    print(englishwords[indexoflargest]," is suggestion would you like to add")
+                    add=input("add , choose y/n")
+                    if add=="y":
+                        finalsentence.append(englishwords[indexoflargest])
+                        spellcheckedwords += 1
+                        words +=1
+                    elif add=="n":
+                        finalsentence.append("?"+sentencewords2[i]+"?")
+                        words +=1
+                        incorrectwords += 1
+        print("your final sentence is ",finalsentence)
+        print("total words:",words,"correct words:",correct,"incorrectwords:",incorrectwords,"words added to dictionary:",dictwords," spell checked:",spellcheckedwords)
+        actionmenu=False                    
+    else:
+        print("You have not entered a valid answer. Please enter 0, 1 or 2.")
+#whats left is to add stats to the new file and to correct spellchecker for both file
+
+
+"""
+"""
+#Athlete database
+
+def search(): # sub program to search atheletes
+  name=input("enter name to search record for")
+  for i in range(len(athlete)):
+      if name==athlete[i][0]:
+        print(athlete[i])
+def add(): # subprogram to add atheletes
+  addingplayer=input("do you want to add a player , y/n")
+  if addingplayer=="y":
+    athlete.append([])
+    print(athlete)
+    for i in range(3):
+      addingplayerinfo=input("enter the relevant information")
+      athlete[-1].append(addingplayerinfo)
+  print(athlete)
+
+def modify(): # subprogram to modify athletes
+  modifyplayer=input("enter player name to modify")
+  for i in range(len(athlete)):
+    if modifyplayer==athlete[i][0]:
+      column=input("what do you wish to modify, name,age or hr")
+      if column=="name":
+        athlete[i][0]=input("enter the name")
+      elif column=="age":
+        athlete[i][1]==input("enter the age")
+      else:
+        athlete[i][2]==input("enter the hr")
+        
+  print(athlete)
+
+def delete(): # subprogram to delete athletes
+  deleteathlete=input("which athlete would you like to delete")
+  for i in range(len(athlete)):
+    if deleteathlete==athlete[i][0]:
+      athlete.pop(i)
+      break
+  print(athlete)
+
+
+# Main Program 
+athlete=[
+        ["tom",45,160],
+        ["jacob",18,120],
+        ["Carl",28,140]
+        ]
+
+while True:
+  choice=input("what would you like to do? 1.search 2. add  3. modify 4. delete")
+  if choice=="1":
+    search()
+  elif choice=="2":
+    add()
+  elif choice=="3":
+    modify()
+  elif choice=="4":
+    delete()
+
+"""
+
+"""
+#FIle Handling Practise with 1 d/2d lists
+
+
+def openfile():
+  myFile=open("student.txt","r")
+  
+  for line in myFile:
+    print(line)
+  myFile.close()
+
+
+
+def modstudent():
+  students=[]
+  myFile=open("student.txt","r")
+  for line in myFile:
+    students.append(line.rstrip("\n"))
+  print(students)
+  studententry=input("enter a student to replace")
+  students.remove(studententry)
+  myFile=open("student.txt","w")
+  for i in range(len(students)):
+    line=students[i] +"\n"
+    myFile.write(line)
+  myFile.close()
+  
+
+
+def addstudent():
+  myFile=open("student.txt","a")
+  studententry=""
+  while studententry!="end":
+    studententry=input("enter a student")
+    print("appending text:")
+    line=(studententry +'\n')
+    myFile.write(line)
+  myFile.close()
+
+def deletestudent():
+  myFile=open("student.txt","r")
+  students=[]
+  for line in myFile:
+    students.append(line.rstrip("\n"))
+  myFile.close()
+  studententry=""
+  while studententry!="end":
+    studententry=input("which student would you like to modify")
+    students.remove(studententry)
+    myFile=open("student.txt","w")
+    for i in range(len(students)):
+      line=(students[i]+"\n")
+      myFile.write(line)
+    myFile.close()
+
+
+choices=True
+while choices==True:
+  option=input("choose an option add,remove")
+  if option=="remove":
+    deletestudent()
+  elif option=="add":
+    addstudent()
+
+    
+    """
+

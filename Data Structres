@@ -1,0 +1,195 @@
+"""
+#Stack using 1 dimensional data structure -list AQA alevel curriculum
+
+stack=[None]*6
+print(stack)
+last=-1
+
+def add(item):
+  global last
+  for i in range(len(stack)):
+    if stack[i] is None:
+      stack[i]=item
+      last=last+1
+      break
+
+def remove():
+  global last
+  stack[last]=None
+  last=last-1
+
+add(1)
+print(stack,"last :",last)
+add(2)
+print(stack,"last :",last)
+remove()
+print(stack)
+print(last)
+remove()
+print(stack)
+print(last)
+
+"""
+"""
+#Linear Que -Basic Implementation for Alevel Curriculum
+front = -1
+rear = -1
+que = [""] * 5
+
+def add(item):
+    global rear, front
+    if rear < len(que) - 1:  # Checking if queue is not full
+        rear += 1
+        que[rear] = item
+        if front == -1:  # Update front if this is the first item
+            front = 0
+    else:
+        print("Queue is full!")
+
+def remove():
+    global front, rear
+    if front == -1:
+        print("Queue is empty!")
+    else:
+        que[front] = ""  # Simply remove the item
+        if front == rear:  # Reset front and rear if it was the last item
+            front = -1
+            rear = -1
+        else:
+            front += 1
+print(que)
+
+while True:
+  print("Front:", front, "Rear:", rear)
+  option = input("In queue, what to do? 1. Add 2. Remove 3. check Exit: ")
+  if option == "1":
+      item = input("Enter item to add: ")
+      add(item)
+      print(que)
+      print("Front:", front, "Rear:", rear)
+  elif option == "2":
+      remove()
+      print(que)
+      print("Front:", front, "Rear:", rear)
+  elif option == "3":
+      break
+  else:
+      print("Invalid option")
+"""
+"""
+#Circular Que
+front = -1
+rear = -1
+que = [""] * 5
+size=0
+
+def add(item):
+  global rear, front,size
+  if size < len(que):  # Checking if queue is not full
+      rear=(rear + 1)%5
+      que[rear] = item
+      if front == -1:  # Update front if this is the first item
+          front = 0
+      size=size+1
+  else:
+      print("Queue is full!")
+
+def remove():
+  global front, rear, size
+  if size == 0:
+      print("Queue is empty!")
+  else:
+      que[front] = ""  # Simply remove the item
+      if front == rear:  # Reset front and rear if it was the last item
+          front = -1
+          rear = -1
+      else:
+          front = (front + 1) % 5
+      size -= 1  # Decrement size after removal
+print(que)
+
+while True:
+  print("Front:", front, "Rear:", rear,"size:",size)
+  option = input("In queue, what to do? 1. Add 2. Remove 3. check Exit: ")
+  if option == "1":
+      item = input("Enter item to add: ")
+      add(item)
+      print(que)
+      print("Front:", front, "Rear:", rear,"size:",size)
+  elif option == "2":
+      remove()
+      print(que)
+      print("Front:", front, "Rear:", rear,"size:",size)
+  elif option == "3":
+      break
+  else:
+      print("Invalid option!")
+
+
+
+"""
+
+
+
+
+
+"""
+#Priority Que using Two dimensional array abstract and insertion sort algorithm 
+
+def insertion_sort_2d(arr):
+  n = len(arr)
+  for i in range(1, n):
+      key = arr[i]
+      j = i - 1
+      while j >= 0 and (arr[j][1] is None or (key[1] is not None and arr[j][1] > key[1])):
+          arr[j + 1] = arr[j]
+          j -= 1
+      arr[j + 1] = key
+
+que = [[None, None] for _ in range(5)]
+print(que)
+
+def enqueue(job, importance):
+  global que
+  if que[-1][0] is None and que[-1][1] is None:
+      que[-1][0] = job
+      que[-1][1] = importance
+      insertion_sort_2d(que)
+      print("Enqueued job '{}' with importance '{}'".format(job, importance))
+      print("Current queue:", que)
+  else:
+      print("Queue is full. Cannot enqueue more items.")
+
+def dequeue():
+  global que
+  if que[0][0] is not None or que[0][1] is not None:
+      job, importance = que[0]
+      que = que[1:] + [[None, None]]
+      print("Dequeued job '{}' with importance '{}'".format(job, importance))
+      print("Current queue:", que)
+  else:
+      print("Queue is empty. Cannot dequeue.")
+
+# Menu Interface
+while True:
+  print("\nMenu:")
+  print("1. Enqueue")
+  print("2. Dequeue")
+  print("3. Exit")
+
+  choice = input("Enter your choice: ")
+
+  if choice == '1':
+      job = input("Enter job: ")
+      importance = int(input("Enter the priority: "))
+      enqueue(job, importance)
+  elif choice == '2':
+      dequeue()
+  elif choice == '3':
+      print("Exiting...")
+      break
+  else:
+      print("Invalid choice. Please enter 1, 2, or 3.")
+
+"""
+
